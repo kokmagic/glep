@@ -18,7 +18,7 @@ public class GrepLauncher {
     @Argument(usage = "Sets the word to search")
     private String wordFilter;
 
-    @Argument(required = true, usage = "Input file")
+    @Argument(required = true, index = 1, usage = "Input file")
     private String inputFile;
 
     public static void main(String[] args) {
