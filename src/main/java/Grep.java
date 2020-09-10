@@ -28,26 +28,21 @@ public class Grep {
 
     public ArrayList<String> grep() throws IOException {
         Pattern pattern;
-        if (flagR) {
-            if (flagI) pattern = Pattern.compile(wordFilter, Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
-            else pattern = Pattern.compile(wordFilter);
-        } else if (flagI) pattern = Pattern.compile(wordFilter.toLowerCase());
+        if (!flagR && !wordFilter.matches("[а-яА-Яa-zA-Z]+"))
+            throw new IllegalArgumentException("Вводите только буквенные символы!");
+        if (flagI) pattern = Pattern.compile(wordFilter, Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
         else pattern = Pattern.compile(wordFilter);
         BufferedReader input = new BufferedReader(new FileReader(inputFile));
         String line;
         ArrayList<String> output = new ArrayList<>();
         try (input) {
             while ((line = input.readLine()) != null) {
-                String testLine;
-                if (!flagR & flagI) testLine = line.toLowerCase();
-                        else testLine = line;
-                Matcher matcher = pattern.matcher(testLine);
+                Matcher matcher = pattern.matcher(line);
                 boolean matcherFind = matcher.find();
-                if (flagV & !matcherFind) output.add(line);
-                if (!flagV & matcherFind) output.add(line);
+                if (flagV && !matcherFind) output.add(line);
+                if (!flagV && matcherFind) output.add(line);
             }
             return output;
         }
-
     }
 }
